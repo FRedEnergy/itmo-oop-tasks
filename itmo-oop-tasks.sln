@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "itmo-oop-tasks", "itmo-oop-tasks\itmo-oop-tasks.csproj", "{445A0A8B-A752-4260-97A7-08273CCA2866}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lab1", "Lab1\Lab1.csproj", "{88B72806-EB28-49FB-AEA9-17B956A7F1EC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{445A0A8B-A752-4260-97A7-08273CCA2866}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{445A0A8B-A752-4260-97A7-08273CCA2866}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{445A0A8B-A752-4260-97A7-08273CCA2866}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{445A0A8B-A752-4260-97A7-08273CCA2866}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88B72806-EB28-49FB-AEA9-17B956A7F1EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88B72806-EB28-49FB-AEA9-17B956A7F1EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88B72806-EB28-49FB-AEA9-17B956A7F1EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88B72806-EB28-49FB-AEA9-17B956A7F1EC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
