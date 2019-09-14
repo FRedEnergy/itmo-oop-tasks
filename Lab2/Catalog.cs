@@ -5,7 +5,7 @@ namespace Lab2
 {
     public class Catalog
     {
-        
+
         public List<Artist> Artists = new List<Artist>();
 
         public IEnumerable<Album> Albums
@@ -26,14 +26,14 @@ namespace Lab2
         public SearchResult Query(SearchQuery query)
         {
             var result = new SearchResult();
-            
+
             result.Tracks.AddRange(Tracks.Where(it => it.Matches(query)));
             result.Artists.AddRange(Artists.Where(it => it.Matches(query)));
             result.Albums.AddRange(Albums.Where(it => it.Matches(query)));
 
             return result;
         }
-        
-        
+
+
     }
 }

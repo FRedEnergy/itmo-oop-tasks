@@ -8,7 +8,7 @@ namespace Lab2
     {
         public readonly String Name;
         public readonly List<Genre> ChildGenres = new List<Genre>();
-        
+
         public Genre(String name)
         {
             this.Name = name;
@@ -25,7 +25,7 @@ namespace Lab2
             this.ChildGenres.Add(genre);
             genre.AddParent(this);
         }
-        
+
         public bool IsInstanceOrChildren(Genre genre)
         {
             return genre == this || ChildGenres.Any(it => it.IsInstanceOrChildren(genre));

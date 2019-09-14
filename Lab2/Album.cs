@@ -7,12 +7,12 @@ namespace Lab2
     {
 
         public readonly int Year;
-        
+
         public Artist Artist
         {
             get { return Artists.First(); }
         }
-        
+
         public Album(String name, int year): base(name)
         {
             this.Year = year;

@@ -15,13 +15,13 @@ namespace Lab2
             this.IncludeTracks = true;
             return this;
         }
-        
+
         public SearchQuery AddAlbums()
         {
             this.IncludeAlbums = true;
             return this;
         }
-        
+
         public SearchQuery AddArtists()
         {
             this.IncludeArtists = true;
@@ -60,12 +60,12 @@ namespace Lab2
         {
             if (this.TargetGenres.Count == 0)
                 return true;
-            
+
             foreach (var targetGenre in TargetGenres)
             foreach (var genre in genres)
                 if (genre.IsInstanceOrChildren(targetGenre))
                     return true;
-                
+
             return false;
         }
     }

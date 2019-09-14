@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
 
 namespace Lab1
 {
@@ -6,11 +8,31 @@ namespace Lab1
 
         public readonly List<RationalFraction> Fractions = new List<RationalFraction>();
 
-        public int Count
+        private RationalFraction _max;
+        public RationalFraction Max
         {
-            get { return Fractions.Count; }
-            
+            get
+            {
+                if (_max != null)
+                    return _max;
+                return _max = Fractions.Max();
+            }
         }
+
+        private RationalFraction _min;
+
+        public RationalFraction Min
+        {
+            get
+            {
+                if (_min != null)
+                    return _min;
+                return _min = Fractions.Min();
+            }
+        }
+
+        public int Count => Fractions.Count;
+
         public FractionList() { }
 
         public FractionList(List<RationalFraction> list)
@@ -20,55 +42,35 @@ namespace Lab1
 
         public void AddFraction(int m, int n) {
             Fractions.Add(new RationalFraction(m, n));
+            ClearCache();
         }
-        
+
         public void AddFraction(RationalFraction fraction) {
             Fractions.Add(fraction);
+            ClearCache();
         }
-        
+
         public RationalFraction this[int i]
         {
-            get { return Fractions[i]; }
-            set { Fractions[i] = value; }
-        }
-        public RationalFraction GetMaxFraction() {
-            RationalFraction max = null;
-
-            foreach (var fraction in Fractions) 
-                if (max == null || fraction > max) 
-                    max = fraction;
-
-            return max;
-        }
-        
-        public RationalFraction GetMinFraction() {
-            RationalFraction min = null;
-
-            foreach (var fraction in Fractions) 
-                if (min == null || fraction < min) 
-                    min = fraction;
-
-            return min;
+            get => Fractions[i];
+            set
+            {
+                Fractions[i] = value;
+                ClearCache();
+            }
         }
 
-        public int CountGreater(RationalFraction fraction) {
-            var n = 0;
+        public int CountGreater(RationalFraction fraction)
+            => Fractions.Count(it => it > fraction);
 
-            foreach (var containedFraction in Fractions) 
-                if (containedFraction > fraction)
-                    n++;
-            
-            return n;
-        }
-        
-        public int CounterLower(RationalFraction fraction) {
-            var n = 0;
+        public int CounterLower(RationalFraction fraction)
+            => Fractions.Count(it => it < fraction);
 
-            foreach (var containedFraction in Fractions) 
-                if (containedFraction < fraction)
-                    n++;
-            
-            return n;
+
+        public void ClearCache()
+        {
+            this._min = null;
+            this._max = null;
         }
     }
 }

@@ -18,15 +18,15 @@ namespace Lab1
         public static bool operator >(RationalFraction a, RationalFraction b) {
             return a.CompareTo(b) > 0;
         }
-        
+
         public static RationalFraction operator +(RationalFraction a, RationalFraction b) {
             return new RationalFraction(a.m * b.n + a.n * b.m, a.n * b.n); //a/b + c/d = (ad + bc) / bd
         }
-        
+
         public int CompareTo(RationalFraction other) {
             if (ReferenceEquals(this, other)) return 0;
             if (ReferenceEquals(null, other)) return 1;
-            
+
             var lhs = m * other.n;
             var rhs = n * other.m;
             if (lhs < rhs) return -1;

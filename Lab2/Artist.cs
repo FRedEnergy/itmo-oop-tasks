@@ -25,7 +25,7 @@ namespace Lab2
         {
             this.Albums.Add(album);
         }
-        
+
         public bool Matches(SearchQuery query)
         {
             return query.IncludeArtists
