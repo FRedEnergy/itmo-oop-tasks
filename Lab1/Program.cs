@@ -25,6 +25,12 @@ namespace Lab1 {
             var polynomialSum = new Polynomial(new List<RationalFraction>(new[]{new RationalFraction(10, 2)})) + polynomial;
 
             Console.WriteLine("Value of polynomial sum at x = 10: " + polynomialSum.Evaluate(10.0));
+
+            var fractListFromFile =
+                FractionList.ReadFromFile("./../../../input.txt");
+            Console.WriteLine("Read from file: ");
+            foreach (var fract in fractListFromFile.Fractions)
+                Console.WriteLine(fract);
         }
     }
 

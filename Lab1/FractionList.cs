@@ -1,5 +1,8 @@
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Security;
 using System.Security.Claims;
 
 namespace Lab1
@@ -71,6 +74,20 @@ namespace Lab1
         {
             this._min = null;
             this._max = null;
+        }
+
+        public static FractionList ReadFromFile(String fileName)
+        {
+            var list = new FractionList();
+            var lines = System.IO.File.ReadAllLines(fileName);
+            foreach (var line in lines)
+            {
+                var trimmed = line.Trim();
+                var splitted = trimmed.Split("/");
+                list.AddFraction(Int32.Parse(splitted[0].Trim()), Int32.Parse(splitted[1].Trim()));
+            }
+
+            return list;
         }
     }
 }
