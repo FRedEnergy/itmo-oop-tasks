@@ -1,14 +1,17 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Lab2
 {
     public class SearchQuery
     {
-        public bool IncludeTracks = false, IncludeAlbums = false, IncludeArtists = false;
-        public List<Genre> TargetGenres = new List<Genre>();
-        public String NameQuery = "";
-        public int TargetYear = -1;
+        public bool IncludeTracks { get; private set; } = false;
+        public bool IncludePlaylists { get; private set; } = false;
+        public bool IncludeArtists { get; private set; } = false;
+        private readonly List<Genre> _targetGenres = new List<Genre>();
+        private String _nameQuery = "";
+        private int _targetYear = -1;
 
         public SearchQuery AddTracks()
         {
@@ -18,7 +21,7 @@ namespace Lab2
 
         public SearchQuery AddAlbums()
         {
-            this.IncludeAlbums = true;
+            this.IncludePlaylists = true;
             return this;
         }
 
@@ -30,43 +33,41 @@ namespace Lab2
 
         public SearchQuery Matching(String query)
         {
-            this.NameQuery = query;
+            this._nameQuery = query;
             return this;
         }
 
         public SearchQuery WithGenres(params Genre[] genres)
         {
-            this.TargetGenres.AddRange(genres);
+            this._targetGenres.AddRange(genres);
             return this;
         }
 
         public SearchQuery AtYear(int year)
         {
-            this.TargetYear = year;
+            this._targetYear = year;
             return this;
         }
 
         public bool YearMatches(int year)
         {
-            return this.TargetYear == -1 || this.TargetYear == year;
+            return this._targetYear == -1 || this._targetYear == year;
         }
 
         public bool NameMatches(String objectName)
         {
-            return this.NameQuery.Length == 0 || objectName.Contains(this.NameQuery);
+            return this._nameQuery.Length == 0 || objectName.Contains(this._nameQuery);
         }
 
         public bool GenresMatch(IEnumerable<Genre> genres)
         {
-            if (this.TargetGenres.Count == 0)
+            if (this._targetGenres.Count == 0)
                 return true;
 
-            foreach (var targetGenre in TargetGenres)
-            foreach (var genre in genres)
-                if (genre.IsInstanceOrChildren(targetGenre))
-                    return true;
-
-            return false;
+            return (from targetGenre in _targetGenres
+                from genre in genres
+                where genre.IsInstanceOrChildren(targetGenre)
+                select targetGenre).Any();
         }
     }
 }

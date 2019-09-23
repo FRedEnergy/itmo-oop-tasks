@@ -8,13 +8,13 @@ namespace Lab2
         public readonly Album Album;
         public readonly String Name;
 
-        public int Year
-        {
-            get { return Album.Year; }
-        }
+        public int Year => Album.Year;
 
-        public Track(Artist artist, Album album, string name)
+        internal Track(Artist artist, Album album, string name)
         {
+            if(album == null || artist == null)
+                throw new InvalidOperationException("Tried to create track without artist or album");
+            
             Artist = artist;
             Album = album;
             Name = name;
@@ -26,6 +26,11 @@ namespace Lab2
                    && query.NameMatches(this.Name)
                    && query.GenresMatch(this.Album.Genres)
                    && query.YearMatches(this.Year);
+        }
+
+        public override string ToString()
+        {
+            return $"{Name} by {Artist.Name} ({Album.Name}, {Year})";
         }
     }
 }

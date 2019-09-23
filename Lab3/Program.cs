@@ -9,7 +9,8 @@ namespace Lab3
     {
         static void Main(string[] args)
         {
-            var fileName = "./../../../sample.ini";
+            var fileName = "./../../../sample.i" +
+                           "ni";
             var dataFile = File.Exists(fileName) ? IniDataFile.Parse(fileName) : null;
             if (dataFile == null)
             {

@@ -32,5 +32,10 @@ namespace Lab2
                    && query.NameMatches(Name)
                    && query.GenresMatch(ArtistGenres);
         }
+        
+        public override string ToString()
+        {
+            return $"{Name} ({String.Join(", ", ArtistGenres.Select(that => that.Name))})";
+        }
     }
 }

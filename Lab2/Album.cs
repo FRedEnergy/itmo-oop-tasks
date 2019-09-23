@@ -3,32 +3,39 @@ using System.Linq;
 
 namespace Lab2
 {
-    public class Album: TrackGroup, ISearchable
+    public class Album: Playlist, ISearchable
     {
 
         public readonly int Year;
 
-        public Artist Artist
-        {
-            get { return Artists.First(); }
-        }
+        public Artist Artist => _tracks.Count == 0 ? null : Artists.First();
 
         public Album(String name, int year): base(name)
         {
             this.Year = year;
         }
 
-        public void AddTracks(params Track[] tracks)
+        public Track CreateTrack(Artist artist, String name)
         {
-            this.Tracks.AddRange(tracks);
+            if(Artist != null && artist != Artist)
+                throw new InvalidOperationException("One album can contain tracks only from one album");
+           
+            var track = new Track(artist, this, name);
+            this._tracks.Add(track);
+            return track;
         }
 
-        public bool Matches(SearchQuery query)
+        public new bool Matches(SearchQuery query)
         {
-            return query.IncludeAlbums
+            return query.IncludePlaylists
                    && query.YearMatches(Year)
                    && query.NameMatches(Name)
                    && query.GenresMatch(Genres);
+        }
+
+        public override string ToString()
+        {
+            return $"{Name} by {String.Join(", ", Artists.Select(that => that.Name))} ({Year})";
         }
     }
 }
