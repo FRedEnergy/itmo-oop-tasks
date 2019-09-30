@@ -9,26 +9,27 @@ namespace Lab3
     {
         static void Main(string[] args)
         {
-            var fileName = "./../../../sample.i" +
-                           "ni";
-            var dataFile = File.Exists(fileName) ? IniDataFile.Parse(fileName) : null;
-            if (dataFile == null)
+            var fileName = "./../../../sample.ini";
+
+            if (!File.Exists(fileName))
             {
                 Console.WriteLine(fileName + " not found");
                 return;
             }
 
+            var dataFile = IniDataFile.Parse(fileName);
+
             var commonSection = dataFile["COMMON"];
-            var statisterTimeMs = commonSection.get<int>("StatisterTimeMs");
-            var diskCachePath = commonSection.get<string>("DiskCachePath");
+            var statisterTimeMs = commonSection.Get<int>("StatisterTimeMs");
+            var diskCachePath = commonSection.Get<string>("DiskCachePath");
 
             Console.WriteLine("COMMON.StatisterTimeMS = " + statisterTimeMs);
             Console.WriteLine("COMMON.DiskCachePath = " + diskCachePath);
 
 
-            Console.WriteLine("NCMD.SampleRate + 0.5 = " + dataFile["NCMD"].get<double>("SampleRate") + 0.5);
+            Console.WriteLine("NCMD.SampleRate + 0.5 = " + dataFile["NCMD"].Get<double>("SampleRate") + 0.5);
 
-            Console.WriteLine("ADC_DEV.Driver = " + dataFile["ADC_DEV"].get<string>("Driver"));
+            Console.WriteLine("ADC_DEV.Driver = " + dataFile["ADC_DEV"].Get<string>("Driver"));
         }
     }
 }

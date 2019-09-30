@@ -10,8 +10,8 @@ namespace Lab3
 
         public IniDataSection this[string key]
         {
-            get => Sections.GetValueOrDefault(key, null);
-            set => Sections[key] = value;
+            get => Sections.GetValueOrDefault(key, null) ?? throw new IniUnknownSectionException(key);
+            private set => Sections[key] = value;
         }
 
         public static IniDataFile Parse(string fileName)
@@ -54,7 +54,7 @@ namespace Lab3
                     var key = exp[0].Trim();
                     var value = exp[1].Trim();
 
-                    section.put(key, value);
+                    section.Put(key, value);
                 }
                 catch (Exception e)
                 {

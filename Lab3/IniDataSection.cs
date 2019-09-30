@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace Lab3
 {
@@ -16,12 +17,12 @@ namespace Lab3
 
         public IniDataSection(string name) : this(name, new Dictionary<string, string>()){}
 
-        public void put(string key, string data)
+        public void Put(string key, string data)
         {
             this.Values[key] = data;
         }
 
-        public T get<T>(string key)
+        public T Get<T>(string key)
         {
             var v = Values.GetValueOrDefault(key, null);
             if (v == null)
@@ -34,7 +35,7 @@ namespace Lab3
             }
             catch (Exception e){
                 if(e is FormatException || e is InvalidCastException)
-                    throw new IniFormatException("Unable to convert " + v + " to " + typeof(T));
+                    throw new IniTypeException("Unable to convert " + v + " to " + typeof(T), e);
                 throw;
             }
         }
