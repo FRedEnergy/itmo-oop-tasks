@@ -1,0 +1,5 @@
+dao=mysql
+host=localhost
+user=root
+password=mysql
+database=lab4
