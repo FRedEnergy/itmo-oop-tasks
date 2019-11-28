@@ -8,7 +8,7 @@ namespace Lab4
     class ShopService
     {
 
-        private const String PropsFile = "./../../settings.property";
+        private const String PropsFile = "./../../../settings.property";
         
         private IShopDao Dao;
 
