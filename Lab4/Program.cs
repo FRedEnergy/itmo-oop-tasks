@@ -23,13 +23,13 @@ namespace Lab4
             Console.WriteLine("Checking what we can buy for 20 units of currency");
             foreach (var stack in availableItems)
                 Console.WriteLine($"{stack.Amount} of {stack.Item.name}");
-        
+
             service.AddShopItems(shop, bananaItem, 10);
             Console.WriteLine("Added 10 bananas");
 
             var secondShop = service.CreateShop("Second Shop", "ul. Kronverkskaya 14");
             Console.WriteLine("Created second shop");
-            
+
             service.CreateItem(secondShop, bananaItem, 10, 12);
             Console.WriteLine("Added bananas in second shop for price of 12 per unit");
 

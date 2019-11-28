@@ -26,10 +26,10 @@ namespace Lab4
         private void CheckConnection()
         {
             if (IsInitialized) return;
-            
+
             Connection = new MySqlConnection($"Server={host}; database={database}; UID={user}; password={password};");
             Connection.Open();
-            
+
             new MySqlCommand($"create table if not exists shops\n(\n\tid int auto_increment,\n\ttitle varchar(64) null," +
                              $"\n\taddress varchar(64) null,\n\tconstraint shops_pk\n\t\tprimary key (id)\n);",
                 Connection).ExecuteNonQuery();
@@ -37,24 +37,24 @@ namespace Lab4
                              $"\n\tshop_id int null,\n\tamount int null,\n\tcost float null\n);\n\n",
                 Connection).ExecuteNonQuery();
         }
-        
-        
+
+
 
         public int CreateShop(string title, string address)
         {
             CheckConnection();
-            var command = PrepareCommand($"INSERT INTO shops (title, address) VALUES (@title, @address)", 
+            var command = PrepareCommand($"INSERT INTO shops (title, address) VALUES (@title, @address)",
                 new Dictionary<string, object> {{"@title", title}, {"@address", address}});
             command.ExecuteNonQuery();
             return (int) command.LastInsertedId;
         }
-        
+
         public ShopItem CreateItem(int shopId, Item item, int amount, int price)
         {
             CheckConnection();
             MySqlDataReader reader = PrepareCommand($"SELECT * FROM shops WHERE id = @id",
                 new Dictionary<string, object>{{"@id", shopId}}).ExecuteReader();
-            
+
             if (!reader.Read())
             {
                 reader.Close();
@@ -67,11 +67,11 @@ namespace Lab4
             PrepareCommand($"INSERT INTO items (name, shop_id, amount, cost) VALUES(@name,@shop,@amount,@price)",
                     new Dictionary<string, object>{{"@name", item.name}, {"@shop", shopId}, {"@amount", amount}, {"@price", price}})
                 .ExecuteNonQuery();
-            
+
             return new ShopItem(shop, new ItemStack(item, amount), price);
         }
 
-        public void AddShopItems(int shop, Item item, int amount)
+        public void ChangeShopItemsAmount(int shop, Item item, int amount)
         {
             CheckConnection();
             PrepareCommand($"UPDATE items SET amount = amount + @amount WHERE shop_id = @shop AND name = @name",
@@ -89,11 +89,11 @@ namespace Lab4
         {
             CheckConnection();
             MySqlDataReader reader = new MySqlCommand("SELECT * FROM shops", Connection).ExecuteReader();
-            
+
             var shopList = new List<Shop>();
             while (reader.Read())
                 shopList.Add(ReadShop(reader));
-            
+
             reader.Close();
             return shopList;
         }
@@ -111,14 +111,14 @@ namespace Lab4
 
             var shop = ReadShop(reader);
             reader.Close();
-            
+
             reader = PrepareCommand($"SELECT * FROM items WHERE shop_id = @id",
                 new Dictionary<string, object>{{"@id", shopId}}).ExecuteReader();
-            
+
             var shopItems = new List<ShopItem>();
             while (reader.Read())
                 shopItems.Add(ReadShopItem(shop, reader));
-            
+
             reader.Close();
 
             return shopItems;
@@ -126,12 +126,12 @@ namespace Lab4
 
         public List<ShopItem> GetItemInAllShop(Item item)
         {
-          
+
             CheckConnection();
             MySqlDataReader reader = PrepareCommand($"SELECT * FROM items JOIN shops ON items.shop_id = shops.id" +
                                                     $" WHERE items.name = @name",
                 new Dictionary<string, object>{{"name", item.name}}).ExecuteReader();
-            
+
             var shopItems = ReadShopItems(reader);
             reader.Close();
             return shopItems;
@@ -152,7 +152,7 @@ namespace Lab4
             var shopItems = new List<ShopItem>();
             while (reader.Read())
                 shopItems.Add(ReadShopItem(ReadShop(reader), reader));
-                
+
             return shopItems;
         }
 
@@ -163,10 +163,10 @@ namespace Lab4
             var cost = reader.GetInt32("cost");
             return new ShopItem(shop, new ItemStack(new Item(name), amount), cost);
         }
-        
+
         private Shop ReadShop(MySqlDataReader reader)
         {
-            return new Shop(reader.GetInt32("id"), reader.GetString("title"), 
+            return new Shop(reader.GetInt32("id"), reader.GetString("title"),
                 reader.GetString("address"));
         }
 
@@ -178,6 +178,6 @@ namespace Lab4
 
             return command;
         }
-        
+
     }
 }

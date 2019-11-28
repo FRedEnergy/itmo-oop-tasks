@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 
 namespace Lab4
 {
@@ -9,19 +10,19 @@ namespace Lab4
     {
 
         private const String PropsFile = "./../../../settings.property";
-        
+
         private IShopDao Dao;
 
         public ShopService()
         {
             if (!File.Exists(PropsFile))
                 throw new Exception("Properties file not found: " + PropsFile);
-            
+
             var data = File.ReadAllLines(PropsFile).ToDictionary(row => row.Split('=')[0],
                 row => string.Join("=", row.Split('=').Skip(1).ToArray()));
             var daoType = data["dao"];
 
-            Dao = (daoType == "sql") ? (IShopDao) new SqlShopDao(data["host"], data["user"], 
+            Dao = (daoType == "sql") ? (IShopDao) new SqlShopDao(data["host"], data["user"],
                 data["password"], data["database"]) : new FileDao();
         }
 
@@ -45,6 +46,7 @@ namespace Lab4
             return FindShopCheapestBundle(stacks);
         }
 
+
         public int GetCost(Shop shop, List<ItemStack> stacks)
         {
             var itemsInShop = Dao.GetItemsInShop(shop.Id);
@@ -59,13 +61,38 @@ namespace Lab4
             return result;
         }
 
+        /**
+         * Returns value < 0 if such transaction cannot happen
+         */
+        public int BuyItems(Shop shop, List<ItemStack> stacks)
+        {
+            var itemsInShop = Dao.GetItemsInShop(shop.Id);
+            var isValid = stacks
+                .Select(stack => new {stack, shopItem = itemsInShop.Find(it => Equals(it.Stack.Item, stack.Item))})
+                .All(it => it.shopItem.Stack.Amount >= it.stack.Amount);
+
+            if (!isValid)
+                return -1; // impossible to buy item so cancel the whole transaction
+
+            var totalCost = 0;
+            foreach(var stack in stacks)
+            {
+                var shopItem = itemsInShop.Find(it => Equals(it.Stack.Item, stack.Item));
+                Dao.ChangeShopItemsAmount(shop.Id, stack.Item, -stack.Amount);
+
+                totalCost += shopItem.UnitPrice * stack.Amount;
+            }
+
+            return totalCost;
+        }
+
         public Shop FindShopCheapestBundle(List<ItemStack> stacks)
         {
             int min = Int32.MaxValue;
             Shop minShop = null;
-            
+
             var shopList = Dao.GetShopList();
-            
+
             foreach (var shop in shopList)
             {
                 var cost = GetCost(shop, stacks);
@@ -78,7 +105,7 @@ namespace Lab4
 
             return minShop;
         }
-        
+
         public Shop CreateShop(String title, String address)
         {
             return new Shop(Dao.CreateShop(title, address), title, address);
@@ -91,14 +118,14 @@ namespace Lab4
 
         public void AddShopItems(Shop shop, Item item, int amount)
         {
-            Dao.AddShopItems(shop.Id, item, amount);
+            Dao.ChangeShopItemsAmount(shop.Id, item, amount);
         }
 
         public void SetShopItemPrice(Shop shop, Item item, int price)
         {
             Dao.SetShopItemPrice(shop.Id, item, price);
         }
-        
+
 
     }
 }

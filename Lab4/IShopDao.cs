@@ -9,8 +9,8 @@ namespace Lab4
         int CreateShop(String title, String address);
 
         ShopItem CreateItem(int shopId, Item item, int amount, int price);
-        
-        void AddShopItems(int shop, Item item, int amount);
+
+        void ChangeShopItemsAmount(int shop, Item item, int amount);
 
         void SetShopItemPrice(int shop, Item item, int price);
 
@@ -19,8 +19,8 @@ namespace Lab4
         List<ShopItem> GetItemsInShop(int shopId);
 
         List<ShopItem> GetItemInAllShop(Item item);
-        
+
         List<ShopItem> GetAllItems();
-        
+
     }
 }

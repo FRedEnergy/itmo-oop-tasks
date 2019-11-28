@@ -64,9 +64,9 @@ namespace Lab4
                 foreach (var item in GetAllItems())
                     file.WriteLine($"{item.Stack.Item.name},{item.Owner.Id},{item.Stack.Amount},{item.UnitPrice}");
         }
-        
-        
-        
+
+
+
         public int CreateShop(string title, string address)
         {
             var id = NextId + 1;
@@ -84,18 +84,18 @@ namespace Lab4
             var shopItem = new ShopItem(shopRef, new ItemStack(item, amount), price);
             ShopItems[shopId][item.name] = shopItem;
             DumpDataOnDisk();
-            
+
             return shopItem;
         }
 
-        public void AddShopItems(int shop, Item item, int amount)
+        public void ChangeShopItemsAmount(int shop, Item item, int amount)
         {
             if(!ShopItems.ContainsKey(shop))
                 return;
-            
+
             var shopItems = ShopItems[shop];
             if (!shopItems.ContainsKey(item.name)) return;
-            
+
             shopItems[item.name].Stack.Amount += amount;
             DumpDataOnDisk();
 
@@ -105,16 +105,16 @@ namespace Lab4
         {
             if(!ShopItems.ContainsKey(shop))
                 return;
-            
+
             var shopItems = ShopItems[shop];
             if (!shopItems.ContainsKey(item.name)) return;
-            
+
             shopItems[item.name].UnitPrice = price;
             DumpDataOnDisk();
         }
 
         public List<Shop> GetShopList()
-        { 
+        {
             return new List<Shop>(Shops.Values);
         }
 
